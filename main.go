@@ -1,6 +1,6 @@
 package main
 
-import "kettan/godump/cmd"
+import "github.com/iamken1204/godump/cmd"
 
 func main() {
 	cmd.Execute()
