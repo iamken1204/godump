@@ -11,6 +11,13 @@ import (
 	"github.com/google/gopacket/pcap"
 )
 
+var (
+	cy  = color.New(color.FgCyan).SprintfFunc()
+	mag = color.New(color.FgMagenta).SprintfFunc()
+	gr  = color.New(color.FgGreen).PrintfFunc()
+	hgr = color.New(color.FgHiGreen).PrintfFunc()
+)
+
 func tracePacket() {
 	handle, err := pcap.OpenLive(device, snapshopLen, promiscuous, timeout)
 	if err != nil {
@@ -56,19 +63,17 @@ func printPacketInfo(packet gopacket.Packet) {
 		dstPort = tcp.DstPort
 		payload = tcp.LayerPayload()
 	}
-	cy := color.New(color.FgCyan).SprintfFunc()
-	mag := color.New(color.FgMagenta).SprintfFunc()
 	if len(payload) == 0 {
 		return
 	}
 	fmt.Printf("%s - %s:%s >> %s:%s\n", proto, srcIP, cy("%d", srcPort), dstIP, mag("%d", dstPort))
-	color.New(color.FgGreen).Printf("\n%s\n", payload)
+	gr("\n%s\n", payload)
 
 	if app {
 		appLayer := packet.ApplicationLayer()
 		if appLayer != nil {
 			ap := appLayer.Payload()
-			color.New(color.FgHiGreen).Println(ap)
+			hgr("%s\n", ap)
 		}
 	}
 
